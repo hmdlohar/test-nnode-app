@@ -16,8 +16,8 @@ app.get('/home', (req, res) => {
 
 app.get('/about',function(req, res){
 
-	res.send("this is about file. modi");
-
+	res.send("this is about file. mod");
+	
 });
 
 
