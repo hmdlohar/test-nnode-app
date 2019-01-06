@@ -2,10 +2,17 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-app.use(express.static('static'));
+app.use(express.static('plugins'));
+app.use(express.static('js'));
+
 
 app.get('/', (req, res) => res.send('Hello World!'))
-app.get('/home', (req, res) => res.sendFile( __dirname + "/home.html"))
+
+
+app.get('/home', (req, res) => {
+
+	res.sendFile( __dirname + "/views/home.html")
+})
 
 app.get('/about',function(req, res){
 
