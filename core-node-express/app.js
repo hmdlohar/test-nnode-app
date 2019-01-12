@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const port = 3000
+const port = 2999
 
 app.use(express.static('plugins'));
 app.use(express.static('js'));
@@ -25,22 +25,30 @@ var Student = mongoose.model('Student',studentSchema);
 
 
 
-function insertStudent(name,roll_no){
+function insertStudent(name,roll_no,callback){
 	var s1 = new Student({
 		name: name || "hamid",
 		roll_no : roll_no|| 64
 	});
 	
 	s1.save((err,obj)=>{
-		if(err) return console.error(err);
-		console.log("s1 saved");
+		if(err) {callback({status:false});return;}
+		callback({status:true});
 	});
 }
 
-function showStudents(){
+function deleteStudent(roll_no,callback){
+	Student.remove({roll_no:roll_no},function(err){
+		if(err){console.log(err);callback(false);return;}
+		callback(true);
+	});
+}
+
+function showStudents(callback){
 	Student.find((err,obj)=>{
 		if(err) return console.error(err);
-		console.log("All Students: ",obj);
+		//console.log("All Students: ",obj);
+		callback(obj);
 	});
 }
 app.get('/', (req, res) => res.send('Hello World!'))
@@ -55,6 +63,47 @@ app.get('/about',function(req, res){
 
 	res.send("this is about file. mod");
 	
+});
+
+app.get('/insertStudent',(req,res)=>{
+	console.log(req.query);
+	if(!req.query.name || !req.query.roll_no){
+		res.send("error:");
+		return;
+	}
+	insertStudent(req.query.name,req.query.roll_no,function(rs){
+		console.log(rs)
+		if(rs.status){
+			res.send("inserted");
+		}
+		else{
+			res.send("error");
+		}
+	});
+	
+});
+
+app.get('/deleteStudent',(req,res)=>{
+	console.log(req.query);
+	if(!req.query.roll_no){
+		res.send("error:");
+		return;
+	}
+	deleteStudent(req.query.roll_no,function(rs){
+		if(rs){
+			res.send("deleted");
+		}
+		else{
+			res.send("error");
+		}
+	});
+	
+});
+
+app.get('/getStudent',(req,res)=>{
+	showStudents(function(obj){
+		res.send(obj);
+	});
 });
 
 
