@@ -24,8 +24,10 @@
   "dependencies": {
     "express": "^4.16.4",
     "mongoose": "^5.4.2",
-    "nodemon": "^1.18.9",
     "react": "^16.7.0",
     "react-dom": "^16.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
   }
 }
