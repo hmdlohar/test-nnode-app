@@ -6,6 +6,11 @@ app.use(express.static('plugins'));
 app.use(express.static('js'));
 const mongoose = require('mongoose');
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 mongoose.connect("mongodb://localhost/student_db");
 var db = mongoose.connection;
